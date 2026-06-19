@@ -1,19 +1,9 @@
-interface IUser {
-  id: number;
-  name: string;
-}
+import UserTable from "./UserTable";
 
-const users = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users: IUser[] = await res.json();
-
+export default async function Page() {
   return (
-    <>
-      {users?.map((user: IUser) => (
-        <div key={user?.id}>{user?.name}</div>
-      ))}
-    </>
+    <main className="p-6">
+      <UserTable />
+    </main>
   );
-};
-
-export default users;
+}
