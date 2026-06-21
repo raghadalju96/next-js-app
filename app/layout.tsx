@@ -1,4 +1,7 @@
+import { Suspense } from "react";
 import "./globals.css";
+import { NavBar } from "./NavBar";
+import Loading from "./loading";
 
 export default function RootLayout({
   children,
@@ -7,7 +10,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="winter">
-      <body>{children}</body>
+      <body>
+        <NavBar />
+        <Suspense fallback={<Loading />}>
+          <main className="p-5">{children}</main>
+        </Suspense>
+      </body>
     </html>
   );
 }
