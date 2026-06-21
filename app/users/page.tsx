@@ -1,9 +1,14 @@
 import UserTable from "./UserTable";
 
-export default async function Page() {
+interface Props {
+  searchParams: Promise<{ sortOrder: string }>;
+}
+
+export default async function Page({ searchParams }: Props) {
+  const { sortOrder } = await searchParams;
   return (
     <main className="p-6">
-      <UserTable />
+      <UserTable sortOrder={sortOrder} />
     </main>
   );
 }
