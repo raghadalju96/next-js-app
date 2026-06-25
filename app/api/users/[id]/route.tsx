@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
+import { prisma } from "@/prisma/client";
 
 export async function GET(
   req: NextRequest,
@@ -7,16 +8,13 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  console.log("id:", id);
+  const user = await prisma.user.findUnique({ where: { id: Number(id) } });
 
-  if (Number(id) > 10) {
+  if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  return NextResponse.json({
-    id,
-    name: "Mosh",
-  });
+  return NextResponse.json(user);
 }
 
 export async function PUT(
@@ -31,10 +29,20 @@ export async function PUT(
   if (!validation.success)
     return NextResponse.json(validation.error.message, { status: 400 });
 
-  if (Number(id) > 10)
+  const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+
+  if (!user)
     return NextResponse.json({ error: "user not found" }, { status: 404 });
 
-  return NextResponse.json(body);
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      name: body.name,
+      email: body.email,
+    },
+  });
+
+  return NextResponse.json(updatedUser);
 }
 
 export async function DELETE(
@@ -43,8 +51,12 @@ export async function DELETE(
 ) {
   const { id } = await params;
 
-  if (Number(id) > 10)
+  const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+
+  if (!user)
     return NextResponse.json({ error: "user not found" }, { status: 404 });
+
+  await prisma.user.delete({ where: { id: user.id } });
 
   return NextResponse.json({});
 }
