@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   //     { error: "product already exists " },
   //     { status: 400 }
   //   );
-  // }
+  // }https://res.cloudinary.com/dpgtzrxxb/image/upload/f_auto,q_auto/samples/ecommerce/leather-bag-gray.jpg
 
   const products = await prisma.product.create({
     data: {
@@ -33,5 +33,5 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return NextResponse.json(body, { status: 201 });
+  return NextResponse.json(products, { status: 201 });
 }
